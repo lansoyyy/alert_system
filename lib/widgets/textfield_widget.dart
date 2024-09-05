@@ -45,7 +45,7 @@ class TextFieldWidget extends StatefulWidget {
     this.showEye = false,
     this.enabled = true,
     this.color = Colors.black,
-    this.radius = 100,
+    this.radius = 10,
     this.hasValidator = true,
     this.textCapitalization = TextCapitalization.sentences,
     this.inputType = TextInputType.text,
