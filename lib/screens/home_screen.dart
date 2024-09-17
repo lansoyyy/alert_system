@@ -1,4 +1,5 @@
 import 'package:alert_system/screens/auth/login_screen.dart';
+import 'package:alert_system/screens/tabs/notif_tab.dart';
 import 'package:alert_system/widgets/logout_widget.dart';
 import 'package:alert_system/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static final List<Widget> _widgetOptions = <Widget>[
     const SizedBox(),
     const SizedBox(),
-    const SizedBox(),
+    const NotifTab(),
   ];
 
   void _onItemTapped(int index) {
