@@ -6,22 +6,28 @@ class AnnouncementTab extends StatelessWidget {
 
   final List<Map<String, String>> announcements = const [
     {
-      'title': '3 Days Left for the Event!',
-      'subtitle': 'Get ready for the biggest event of the year.',
+      'title': 'Urgent System Outage!',
+      'subtitle': 'Our services are currently down due to an unexpected issue.',
       'imagePath': 'https://via.placeholder.com/150',
-      'details': 'Join us on the 25th for an incredible event...'
+      'details': 'We are working hard to restore services as quickly as possible. '
+          'Please stay tuned for further updates. We apologize for the inconvenience caused.'
     },
     {
-      'title': 'New Product Launch!',
-      'subtitle': 'Introducing our latest innovation.',
+      'title': 'Critical Security Update!',
+      'subtitle':
+          'Please update your software immediately to avoid vulnerabilities.',
       'imagePath': 'https://via.placeholder.com/150',
-      'details': 'Our new product will change the way you live...'
+      'details':
+          'A major security vulnerability has been discovered. Please ensure that '
+              'your software is up-to-date to avoid potential threats. Update now in the settings.'
     },
     {
-      'title': 'Upcoming Maintenance',
-      'subtitle': 'Our systems will undergo maintenance soon.',
+      'title': 'Scheduled Maintenance Alert',
+      'subtitle': 'We will be undergoing scheduled maintenance soon.',
       'imagePath': 'https://via.placeholder.com/150',
-      'details': 'We are performing scheduled maintenance on the 20th...'
+      'details':
+          'Our systems will be undergoing maintenance on the 20th from 1:00 AM to 3:00 AM. '
+              'During this time, some services may be unavailable. Thank you for your patience.'
     },
   ];
 
