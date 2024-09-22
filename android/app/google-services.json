@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "218701100090",
+    "project_id": "mataasnakahoy-project",
+    "storage_bucket": "mataasnakahoy-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218701100090:android:705770de34e1dff689f103",
+        "android_client_info": {
+          "package_name": "com.example.alert_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCq0YKdxGVLWbpfHe5ZrdxOdZNQk8zSrEE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
