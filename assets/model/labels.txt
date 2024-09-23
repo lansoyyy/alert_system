@@ -1,0 +1,4 @@
+0 Bacterial Dermatosis
+1 Fungal Infections
+2 Healthy
+3 Hypersensitivity Allergic Dermatosis
