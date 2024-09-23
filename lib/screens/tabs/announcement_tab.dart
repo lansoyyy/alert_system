@@ -1,107 +1,189 @@
 import 'package:alert_system/widgets/text_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AnnouncementTab extends StatelessWidget {
-  const AnnouncementTab({super.key});
+  bool? inAdmin;
 
-  final List<Map<String, String>> announcements = const [
-    {
-      'title': 'Urgent System Outage!',
-      'subtitle': 'Our services are currently down due to an unexpected issue.',
-      'imagePath': 'https://via.placeholder.com/150',
-      'details': 'We are working hard to restore services as quickly as possible. '
-          'Please stay tuned for further updates. We apologize for the inconvenience caused.'
-    },
-    {
-      'title': 'Critical Security Update!',
-      'subtitle':
-          'Please update your software immediately to avoid vulnerabilities.',
-      'imagePath': 'https://via.placeholder.com/150',
-      'details':
-          'A major security vulnerability has been discovered. Please ensure that '
-              'your software is up-to-date to avoid potential threats. Update now in the settings.'
-    },
-    {
-      'title': 'Scheduled Maintenance Alert',
-      'subtitle': 'We will be undergoing scheduled maintenance soon.',
-      'imagePath': 'https://via.placeholder.com/150',
-      'details':
-          'Our systems will be undergoing maintenance on the 20th from 1:00 AM to 3:00 AM. '
-              'During this time, some services may be unavailable. Thank you for your patience.'
-    },
-  ];
+  AnnouncementTab({
+    super.key,
+    this.inAdmin = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: ListView.builder(
-          itemCount: announcements.length,
-          itemBuilder: (context, index) {
-            final announcement = announcements[index];
-            return GestureDetector(
-              onTap: () {
-                // Navigate to the Announcement Detail Page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AnnouncementDetailPage(
-                      title: announcement['title']!,
-                      subtitle: announcement['subtitle']!,
-                      imagePath: announcement['imagePath']!,
-                      details: announcement['details']!,
-                    ),
-                  ),
-                );
-              },
-              child: Card(
-                margin: const EdgeInsets.all(16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Announcement Image
-                    ClipRRect(
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(15)),
-                      child: Image.network(
-                        announcement['imagePath']!,
-                        height: 150,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+      body: StreamBuilder<QuerySnapshot>(
+          stream:
+              FirebaseFirestore.instance.collection('Announcement').snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              print(snapshot.error);
+              return const Center(child: Text('Error'));
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Padding(
+                padding: EdgeInsets.only(top: 50),
+                child: Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.black,
+                )),
+              );
+            }
+
+            final data = snapshot.requireData;
+            return Container(
+              child: ListView.builder(
+                itemCount: data.docs.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      // Navigate to the Announcement Detail Page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AnnouncementDetailPage(
+                            title: data.docs[index]['name'],
+                            subtitle: '',
+                            imagePath: data.docs[index]['image'],
+                            details: data.docs[index]['desc'],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      margin: const EdgeInsets.all(16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Announcement Title
-                          TextWidget(
-                            text: announcement['title']!,
-                            fontSize: 20,
-                            isBold: true,
-                            color: Colors.black,
+                          // Announcement Image
+                          ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(15)),
+                            child: Image.network(
+                              data.docs[index]['image'],
+                              height: 150,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          const SizedBox(height: 8),
-                          // Announcement Subtitle
-                          TextWidget(
-                            text: announcement['subtitle']!,
-                            fontSize: 16,
-                            color: Colors.grey.shade700,
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Announcement Title
+                                inAdmin!
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TextWidget(
+                                            text: data.docs[index]['name'],
+                                            fontSize: 20,
+                                            isBold: true,
+                                            color: Colors.black,
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                        title: const Text(
+                                                          'Delete Confirmation',
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'QBold',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        content: const Text(
+                                                          'Are you sure you want to delete this announcement?',
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'QRegular'),
+                                                        ),
+                                                        actions: <Widget>[
+                                                          MaterialButton(
+                                                            onPressed: () =>
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(true),
+                                                            child: const Text(
+                                                              'Close',
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      'QRegular',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ),
+                                                          MaterialButton(
+                                                            onPressed:
+                                                                () async {
+                                                              await FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'Announcement')
+                                                                  .doc(data
+                                                                      .docs[
+                                                                          index]
+                                                                      .id)
+                                                                  .delete();
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: const Text(
+                                                              'Continue',
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      'QRegular',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ));
+                                            },
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : TextWidget(
+                                        text: data.docs[index]['name'],
+                                        fontSize: 20,
+                                        isBold: true,
+                                        color: Colors.black,
+                                      ),
+                                const SizedBox(height: 8),
+                                // Announcement Subtitle
+                                TextWidget(
+                                  text: data.docs[index]['desc'],
+                                  fontSize: 16,
+                                  color: Colors.grey.shade700,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             );
-          },
-        ),
-      ),
+          }),
     );
   }
 }
@@ -150,13 +232,7 @@ class AnnouncementDetailPage extends StatelessWidget {
                 isBold: true,
                 color: Colors.black,
               ),
-              const SizedBox(height: 10),
-              // Announcement Subtitle
-              TextWidget(
-                text: subtitle,
-                fontSize: 18,
-                color: Colors.grey,
-              ),
+
               const SizedBox(height: 16),
               // Announcement Details
               TextWidget(

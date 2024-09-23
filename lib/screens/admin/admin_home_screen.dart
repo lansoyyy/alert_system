@@ -1,3 +1,4 @@
+import 'package:alert_system/screens/admin/add_announcement_screen.dart';
 import 'package:alert_system/screens/auth/login_screen.dart';
 import 'package:alert_system/screens/tabs/announcement_tab.dart';
 import 'package:alert_system/screens/tabs/notif_tab.dart';
@@ -18,7 +19,9 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const AnnouncementTab(),
+    AnnouncementTab(
+      inAdmin: true,
+    ),
     const WeatherTab(),
   ];
 
@@ -43,7 +46,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 Icons.add,
                 color: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => const AddAnnouncementScreen()),
+                );
+              },
             )
           : null,
       appBar: AppBar(
