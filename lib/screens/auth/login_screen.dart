@@ -1,3 +1,4 @@
+import 'package:alert_system/screens/admin/admin_home_screen.dart';
 import 'package:alert_system/screens/auth/signup_screen.dart';
 import 'package:alert_system/screens/home_screen.dart';
 import 'package:alert_system/utils/colors.dart';
@@ -133,6 +134,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     )
                   ],
                 ),
+                const SizedBox(height: 15),
+                TextButton(
+                  onPressed: () {
+                    adminDialog();
+                  },
+                  child: TextWidget(
+                    color: primary,
+                    fontFamily: 'Bold',
+                    text: "Continue as ADMIN",
+                    fontSize: 12,
+                  ),
+                ),
                 const SizedBox(height: 25),
               ],
             ),
@@ -230,6 +243,88 @@ class _LoginScreenState extends State<LoginScreen> {
                     showToast(errorMessage);
                     Navigator.pop(context);
                   }
+                }
+              }),
+              child: TextWidget(
+                text: 'Continue',
+                fontSize: 14,
+                color: Colors.black,
+                fontFamily: 'Bold',
+              ),
+            ),
+          ],
+        );
+      }),
+    );
+  }
+
+  adminDialog() {
+    showDialog(
+      context: context,
+      builder: ((context) {
+        final formKey = GlobalKey<FormState>();
+        final TextEditingController emailController = TextEditingController();
+        final TextEditingController passwordController =
+            TextEditingController();
+
+        return AlertDialog(
+          backgroundColor: Colors.grey[300],
+          title: TextWidget(
+            text: 'Logging in as ADMIN',
+            fontSize: 18,
+            color: Colors.black,
+            fontFamily: 'Bold',
+          ),
+          content: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFieldWidget(
+                  width: 350,
+                  hint: 'Admin Username',
+                  textCapitalization: TextCapitalization.none,
+                  inputType: TextInputType.emailAddress,
+                  label: 'Email',
+                  borderColor: secondary,
+                  controller: emailController,
+                ),
+                TextFieldWidget(
+                  isObscure: true,
+                  showEye: true,
+                  width: 350,
+                  hint: 'Admin Password',
+                  textCapitalization: TextCapitalization.none,
+                  label: 'Password',
+                  borderColor: secondary,
+                  controller: passwordController,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: (() {
+                Navigator.pop(context);
+              }),
+              child: TextWidget(
+                text: 'Cancel',
+                fontSize: 12,
+                color: Colors.black,
+                fontFamily: 'Bold',
+              ),
+            ),
+            TextButton(
+              onPressed: (() async {
+                if (emailController.text == 'admin@gmail.com' &&
+                    passwordController.text == 'admin_password') {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                        builder: (context) => const AdminHomeScreen()),
+                  );
+                } else {
+                  Navigator.pop(context);
+                  showToast('Invalid admin credentails!');
                 }
               }),
               child: TextWidget(
