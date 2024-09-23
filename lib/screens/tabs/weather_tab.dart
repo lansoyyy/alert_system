@@ -1,8 +1,78 @@
+import 'dart:convert';
+
+import 'package:alert_system/utils/const.dart';
 import 'package:alert_system/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart' as location1;
+import 'package:geocoding/geocoding.dart';
+import 'package:intl/intl.dart';
 
-class WeatherTab extends StatelessWidget {
+class WeatherTab extends StatefulWidget {
   const WeatherTab({super.key});
+
+  @override
+  State<WeatherTab> createState() => _WeatherTabState();
+}
+
+class _WeatherTabState extends State<WeatherTab> {
+  @override
+  void initState() {
+    super.initState();
+    getApiData(13.982831, 121.100395);
+  }
+
+  getApiData(lat, long) async {
+    var uri = '$apiEnpoint?lat=$lat&lon=$long&appid=$apiKey';
+    try {
+      var response = await http.get(Uri.parse(uri));
+
+      if (response.statusCode == 200) {
+        // Request was successful
+        var data = json.decode(response.body);
+        var weatherDescription = data['weather'][0]['description'];
+        var temperatureKelvin = data['main']['temp'];
+        double temperatureCelsius =
+            temperatureKelvin - 273.15; // Convert from Kelvin to Celsius
+        var pressure1 = data['main']['pressure'];
+        var humidity = data['main']['humidity'];
+        var windSpeed = data['wind']['speed'];
+
+        setState(() {
+          wind = windSpeed.toString();
+          hum = humidity.toString();
+          pressure = pressure1.toString();
+          temp = temperatureCelsius.toStringAsFixed(0);
+          desc = weatherDescription;
+        });
+
+        print('Weather Description: $weatherDescription');
+        print('Temperature: ${temperatureCelsius.toStringAsFixed(2)}°C');
+        print('Pressure: $pressure');
+        print('Humidity: $humidity');
+        print('Wind Speed: $windSpeed');
+      } else {
+        // Request failed
+        print('Request failed with status: ${response.statusCode}');
+
+        // Show error snackbar
+      }
+    } catch (e) {
+      // An error occurred
+      print('Error: $e');
+
+      // Show error snackbar
+    }
+  }
+
+  String wind = '0';
+  String hum = '0';
+  String pressure = '0';
+  String temp = '0';
+
+  String desc = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +100,7 @@ class WeatherTab extends StatelessWidget {
                       color: Colors.white,
                     ),
                     TextWidget(
-                      text: 'September 18, 2024',
+                      text: DateFormat('MMMM dd, yyyy').format(DateTime.now()),
                       fontSize: 18,
                       color: Colors.white70,
                     ),
@@ -53,7 +123,7 @@ class WeatherTab extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: TextWidget(
-                        text: '27°C',
+                        text: '$temp°C',
                         fontSize: 80,
                         color: Colors.white,
                         isBold: true,
@@ -61,8 +131,8 @@ class WeatherTab extends StatelessWidget {
                     ),
                     // Weather Description
                     TextWidget(
-                      text: 'Sunny',
-                      fontSize: 24,
+                      text: desc,
+                      fontSize: 16,
                       color: Colors.white,
                     ),
                   ],
@@ -77,23 +147,23 @@ class WeatherTab extends StatelessWidget {
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(40)),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     WeatherDetailWidget(
                       icon: Icons.air,
                       label: 'Wind',
-                      value: '15 km/h',
+                      value: '$wind km/h',
                     ),
                     WeatherDetailWidget(
                       icon: Icons.water_drop,
                       label: 'Humidity',
-                      value: '65%',
+                      value: '$hum%',
                     ),
                     WeatherDetailWidget(
                       icon: Icons.speed,
                       label: 'Pressure',
-                      value: '1015 hPa',
+                      value: '$pressure hPa',
                     ),
                   ],
                 ),

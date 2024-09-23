@@ -2,6 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 String userId = FirebaseAuth.instance.currentUser!.uid;
 
+const apiKey = '67a96ca939095cc12748c226c7d3851c';
+
+const apiEnpoint = 'https://api.openweathermap.org/data/2.5/weather';
+
 String logo = 'assets/images/logo.png';
 String label = 'assets/images/label.png';
 String avatar = 'assets/images/avatar.png';

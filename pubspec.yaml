@@ -44,6 +44,9 @@ dependencies:
   firebase_auth:
   get_storage:
   tflite_v2:
+  http:
+  flutter_google_places:
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:
