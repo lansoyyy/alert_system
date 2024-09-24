@@ -1,5 +1,6 @@
 import 'package:alert_system/screens/auth/login_screen.dart';
 import 'package:alert_system/screens/tabs/announcement_tab.dart';
+import 'package:alert_system/screens/tabs/evacuation_tab.dart';
 import 'package:alert_system/screens/tabs/notif_tab.dart';
 import 'package:alert_system/screens/tabs/weather_tab.dart';
 import 'package:alert_system/widgets/logout_widget.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     AnnouncementTab(),
     const WeatherTab(),
     const NotifTab(),
+    const EvacuationTab()
   ];
 
   void _onItemTapped(int index) {
@@ -34,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Announcement',
     'Weather',
     'Notifications',
+    'Evacuation',
   ];
 
   @override
@@ -74,6 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications_none_outlined),
             label: 'Notifications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.health_and_safety_outlined),
+            label: 'Evacuation',
           ),
         ],
         currentIndex: _selectedIndex,
