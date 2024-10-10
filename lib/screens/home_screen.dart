@@ -3,6 +3,7 @@ import 'package:alert_system/screens/tabs/announcement_tab.dart';
 import 'package:alert_system/screens/tabs/evacuation_tab.dart';
 import 'package:alert_system/screens/tabs/notif_tab.dart';
 import 'package:alert_system/screens/tabs/weather_tab.dart';
+import 'package:alert_system/widgets/drawer_widget.dart';
 import 'package:alert_system/widgets/logout_widget.dart';
 import 'package:alert_system/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -42,25 +43,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const DrawerWidget(),
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        foregroundColor: Colors.white,
         backgroundColor: primary,
+        centerTitle: true,
         title: TextWidget(
           text: labels[_selectedIndex],
           fontSize: 18,
           color: Colors.white,
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              logout(context, const LoginScreen());
-            },
-            icon: const Icon(
-              Icons.logout,
-              color: Colors.white,
-            ),
-          ),
-        ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
