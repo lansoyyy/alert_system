@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
 
                 const Text(
-                  '"Mataasnakahoy Automated Technology for Disaster Risk Reduction Alert System"',
+                  '"Mataasnakahoy Alert System"',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
