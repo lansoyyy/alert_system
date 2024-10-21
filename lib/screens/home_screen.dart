@@ -53,6 +53,39 @@ class _HomeScreenState extends State<HomeScreen> {
           fontSize: 18,
           color: Colors.white,
         ),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.info_outline),
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  child: TextWidget(
+                    text: 'DDRMO: 09776825025',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                    color: Colors.red,
+                  ),
+                ),
+                PopupMenuItem(
+                  child: TextWidget(
+                    text: 'PNP: 09159231598',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                    color: Colors.red,
+                  ),
+                ),
+                PopupMenuItem(
+                  child: TextWidget(
+                    text: 'BFP: 09311818435',
+                    fontSize: 18,
+                    fontFamily: 'Bold',
+                    color: Colors.red,
+                  ),
+                ),
+              ];
+            },
+          )
+        ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(

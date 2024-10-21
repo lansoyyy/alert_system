@@ -7,6 +7,7 @@ import 'package:alert_system/widgets/button_widget.dart';
 import 'package:alert_system/widgets/text_widget.dart';
 import 'package:alert_system/widgets/textfield_widget.dart';
 import 'package:alert_system/widgets/toast_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -342,12 +343,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   login(context) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text, password: password.text);
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(user.user!.uid)
+          .get();
+      if (!documentSnapshot['isVerified']) {
+        showToast('Your account is not verified by admin!');
+      } else {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: email.text, password: password.text);
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         showToast("No user found with that email.");

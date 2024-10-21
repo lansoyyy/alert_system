@@ -14,8 +14,10 @@ class AnnouncementTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-          stream:
-              FirebaseFirestore.instance.collection('Announcement').snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection('Announcement')
+              .orderBy('dateTime', descending: true)
+              .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -82,11 +84,16 @@ class AnnouncementTab extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          TextWidget(
-                                            text: data.docs[index]['name'],
-                                            fontSize: 20,
-                                            isBold: true,
-                                            color: Colors.black,
+                                          SizedBox(
+                                            width: 250,
+                                            child: TextWidget(
+                                              align: TextAlign.start,
+                                              text: data.docs[index]['name'],
+                                              fontSize: 20,
+                                              isBold: true,
+                                              color: Colors.black,
+                                              maxLines: 2,
+                                            ),
                                           ),
                                           IconButton(
                                             onPressed: () {
@@ -171,6 +178,7 @@ class AnnouncementTab extends StatelessWidget {
                                 TextWidget(
                                   text: data.docs[index]['desc'],
                                   fontSize: 16,
+                                  align: TextAlign.start,
                                   color: Colors.grey.shade700,
                                 ),
                               ],
@@ -211,36 +219,40 @@ class AnnouncementDetailPage extends StatelessWidget {
       body: Container(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Announcement Image
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.network(
-                  imagePath,
-                  height: 250,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Announcement Image
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.network(
+                    imagePath,
+                    height: 250,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              // Announcement Title
-              TextWidget(
-                text: title,
-                fontSize: 28,
-                isBold: true,
-                color: Colors.black,
-              ),
+                const SizedBox(height: 16),
+                // Announcement Title
+                TextWidget(
+                  text: title,
+                  fontSize: 28,
+                  isBold: true,
+                  color: Colors.black,
+                ),
 
-              const SizedBox(height: 16),
-              // Announcement Details
-              TextWidget(
-                text: details,
-                fontSize: 16,
-                color: Colors.black,
-              ),
-            ],
+                const SizedBox(height: 16),
+                // Announcement Details
+                TextWidget(
+                  align: TextAlign.start,
+                  text: details,
+                  fontSize: 16,
+                  color: Colors.black,
+                  maxLines: 50,
+                ),
+              ],
+            ),
           ),
         ),
       ),

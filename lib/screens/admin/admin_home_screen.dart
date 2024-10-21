@@ -1,5 +1,6 @@
 import 'package:alert_system/screens/admin/add_announcement_screen.dart';
 import 'package:alert_system/screens/admin/admin_evacuation_tab.dart';
+import 'package:alert_system/screens/admin/users_tab.dart';
 import 'package:alert_system/screens/auth/login_screen.dart';
 import 'package:alert_system/screens/tabs/announcement_tab.dart';
 import 'package:alert_system/screens/tabs/notif_tab.dart';
@@ -24,6 +25,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       inAdmin: true,
     ),
     const AdminEvacuationTab(),
+    const UsersTab(),
   ];
 
   void _onItemTapped(int index) {
@@ -35,6 +37,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   List labels = [
     'Announcement',
     'Evacuation',
+    'Users',
   ];
 
   @override
@@ -86,6 +89,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.health_and_safety_outlined),
             label: 'Evacuation',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.groups_2_outlined),
+            label: 'Users',
           ),
         ],
         currentIndex: _selectedIndex,

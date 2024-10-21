@@ -11,7 +11,7 @@ class NotifTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('Announcement')
+            .collection('Notifs')
             .orderBy('dateTime', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -40,6 +40,39 @@ class NotifTab extends StatelessWidget {
                   child: Card(
                     elevation: 3,
                     child: ListTile(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    TextWidget(
+                                      text: data.docs[index]['name'],
+                                      fontSize: 24,
+                                      fontFamily: 'Bold',
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    TextWidget(
+                                      text: data.docs[index]['desc'],
+                                      fontSize: 14,
+                                      fontFamily: 'Regular',
+                                      color: Colors.grey,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                       leading: const Icon(
                         Icons.notifications,
                         color: primary,
@@ -61,10 +94,18 @@ class NotifTab extends StatelessWidget {
                           ),
                         ],
                       ),
-                      trailing: const Icon(
-                        Icons.circle,
-                        color: Colors.red,
-                        size: 10,
+                      trailing: GestureDetector(
+                        onTap: () async {
+                          await FirebaseFirestore.instance
+                              .collection('Notifs')
+                              .doc(data.docs[index].id)
+                              .delete();
+                        },
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                          size: 10,
+                        ),
                       ),
                     ),
                   ),

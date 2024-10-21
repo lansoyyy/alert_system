@@ -1,9 +1,8 @@
-import 'package:alert_system/services/add_notif.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future addAnnouncement(name, desc, image) async {
-  final docUser = FirebaseFirestore.instance.collection('Announcement').doc();
+Future addNotif(name, desc, image) async {
+  final docUser = FirebaseFirestore.instance.collection('Notifs').doc();
 
   final json = {
     'name': name,
@@ -12,8 +11,6 @@ Future addAnnouncement(name, desc, image) async {
     'id': docUser.id,
     'dateTime': DateTime.now(),
   };
-
-  addNotif(name, desc, image);
 
   await docUser.set(json);
 }
